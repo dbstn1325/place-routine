@@ -24,14 +24,32 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
+
+
+
+	/* Database */
+	runtimeOnly 'com.h2database:h2:1.4.200'
+	runtimeOnly 'org.orbisgis:h2gis:1.5.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.9.Final'
+
+	/* Lombok */
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	/* Test */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+processResources.dependsOn('copySecret')
+tasks.register('copySecret', Copy) {
+	from './src/main/resources/config' //복사할 파일 위치
+	include "application*.yml"  // 복사할 파일들
+	into 'src/main/resources'  // 복사될 파일 위치
 }
