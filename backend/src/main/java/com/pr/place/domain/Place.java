@@ -35,20 +35,20 @@ public class Place {
     private Location location;
 
     @Embedded
-    private Feature feature;
+    private String memo;
 
     @Column
     private Point point;
 
 
     @Builder
-    public Place(Category category, String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, Feature feature, Point point) {
+    public Place(Category category, String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, String memo, Point point) {
         this.category = category;
         this.name = name;
         this.openDateTime = openDateTime;
         this.closeDateTime = closeDateTime;
         this.location = location;
-        this.feature = feature;
+        this.memo = memo;
         this.point = point;
     }
 }

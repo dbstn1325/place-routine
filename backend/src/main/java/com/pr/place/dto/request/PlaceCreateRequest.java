@@ -1,7 +1,6 @@
 package com.pr.place.dto.request;
 
 import com.pr.category.domain.Category;
-import com.pr.place.domain.Feature;
 import com.pr.place.domain.Location;
 import com.pr.place.domain.Place;
 import lombok.AccessLevel;
@@ -31,7 +30,7 @@ public class PlaceCreateRequest {
     private Location location;
 
     @NotBlank(message = "공백일 수는 없습니다.")
-    private Feature feature;
+    private String memo;
 
     @NotBlank(message = "공백일 수는 없습니다.")
     private Long categoryId;
@@ -44,7 +43,7 @@ public class PlaceCreateRequest {
                 .openDateTime(this.openDateTime)
                 .closeDateTime(this.closeDateTime)
                 .location(this.location)
-                .feature(this.feature)
+                .memo(this.memo)
                 .point(point)
                 .build();
     }
