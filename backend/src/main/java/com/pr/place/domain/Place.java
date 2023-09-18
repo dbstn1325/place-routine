@@ -2,6 +2,8 @@ package com.pr.place.domain;
 
 import com.pr.category.domain.Category;
 import lombok.*;
+import org.locationtech.jts.geom.Point;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +19,10 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "categories_id", nullable = false)
+    private Category category;
+
     private String name;
 
     @Column(name = "open_date_time", nullable = false)
@@ -31,18 +37,18 @@ public class Place {
     @Embedded
     private Feature feature;
 
+    @Column
+    private Point point;
 
-    @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
-    private Category category;
 
     @Builder
-    public Place(String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, Feature feature, Category category) {
+    public Place(Category category, String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, Feature feature, Point point) {
+        this.category = category;
         this.name = name;
         this.openDateTime = openDateTime;
         this.closeDateTime = closeDateTime;
         this.location = location;
         this.feature = feature;
-        this.category = category;
+        this.point = point;
     }
 }

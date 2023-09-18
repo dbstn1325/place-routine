@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -36,14 +37,15 @@ public class PlaceCreateRequest {
     private Long categoryId;
 
 
-    public Place toEntity(Category category) {
+    public Place toEntity(Category category, Point point) {
         return Place.builder()
+                .category(category)
                 .name(this.name)
                 .openDateTime(this.openDateTime)
                 .closeDateTime(this.closeDateTime)
                 .location(this.location)
                 .feature(this.feature)
-                .category(category)
+                .point(point)
                 .build();
     }
 
