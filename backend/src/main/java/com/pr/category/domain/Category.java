@@ -37,4 +37,6 @@ public class Category {
             throw new InvalidCategoryException(String.format("카테고리 이름의 길이는 %d을 초과할 수 없습니다.", MAX_NAME_LENGTH));
         }
     }
+
+
 }
