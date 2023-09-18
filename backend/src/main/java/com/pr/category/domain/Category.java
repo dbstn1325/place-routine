@@ -1,6 +1,7 @@
 package com.pr.category.domain;
 
 import com.pr.category.exception.InvalidCategoryException;
+import com.pr.place.domain.Place;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
