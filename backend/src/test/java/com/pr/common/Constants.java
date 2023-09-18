@@ -1,4 +1,4 @@
-package com.pr.fixtures;
+package com.pr.common;
 
 public class Constants {
 

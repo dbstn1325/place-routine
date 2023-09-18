@@ -14,8 +14,9 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public CategoryResponse save(CategoryCreateRequest request) {
+        categoryRepository.validateExistCategoryName(request.getName());
+
         Category category = request.toEntity();
-        categoryRepository.validateExistsById(request.getName());
 
         Category savedCategory = categoryRepository.save(category);
         return new CategoryResponse(savedCategory);

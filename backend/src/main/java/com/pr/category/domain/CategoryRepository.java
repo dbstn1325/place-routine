@@ -7,7 +7,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     boolean existsByName(final String name);
 
-    default void validateExistsById(final String name) {
+    default void validateExistCategoryName(final String name) {
         if (existsByName(name)) {
             throw new ExistCategoryException();
         }

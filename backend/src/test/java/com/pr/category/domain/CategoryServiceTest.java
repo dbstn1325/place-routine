@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static com.pr.fixtures.Constants.조깅_카테고리_이름;
+import static com.pr.common.Constants.조깅_카테고리_이름;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest()
