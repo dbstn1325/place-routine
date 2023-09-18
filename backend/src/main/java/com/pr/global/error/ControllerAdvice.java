@@ -3,6 +3,7 @@ package com.pr.global.error;
 import com.pr.category.exception.InvalidCategoryException;
 import com.pr.category.exception.NoSuchCategoryException;
 import com.pr.global.error.dto.ErrorResponse;
+import com.pr.place.exception.InvalidPlaceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +14,8 @@ public class ControllerAdvice {
 
 
     @ExceptionHandler({
-            InvalidCategoryException.class
+            InvalidCategoryException.class,
+            InvalidPlaceException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());

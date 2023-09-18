@@ -1,6 +1,7 @@
 package com.pr.place.domain;
 
 import com.pr.category.domain.Category;
+import com.pr.place.exception.InvalidPlaceException;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
 
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Place {
+
+    private static final int MAX_MEMO_LENGTH = 255;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +46,8 @@ public class Place {
 
     @Builder
     public Place(Category category, String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, String memo, Point point) {
+        validateMemoLength(memo);
+
         this.category = category;
         this.name = name;
         this.openDateTime = openDateTime;
@@ -51,4 +56,12 @@ public class Place {
         this.memo = memo;
         this.point = point;
     }
+
+    private void validateMemoLength(final String memo) {
+        if (memo.length() > MAX_MEMO_LENGTH) {
+            throw new InvalidPlaceException(String.format("일정 메모의 길이는 %d를 초과할 수 없습니다.", MAX_MEMO_LENGTH));
+        }
+    }
+
+
 }
