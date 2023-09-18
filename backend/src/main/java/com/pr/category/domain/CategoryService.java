@@ -13,6 +13,8 @@ public class CategoryService {
 
     public CategoryResponse save(CategoryCreateRequest request) {
         Category category = request.toEntity();
+        categoryRepository.validateExistsById(request.getName());
+
         Category savedCategory = categoryRepository.save(category);
         return new CategoryResponse(savedCategory);
     }

@@ -2,6 +2,7 @@ package com.pr.category.domain;
 
 import com.pr.category.dto.request.CategoryCreateRequest;
 import com.pr.category.dto.response.CategoryResponse;
+import com.pr.category.exception.ExistCategoryException;
 import com.pr.category.exception.InvalidCategoryException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,5 +49,15 @@ class CategoryServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.save(카테고리_생성_요청))
                 .isInstanceOf(InvalidCategoryException.class);
+    }
+
+    @Test
+    void 중복되는_카테고리를_생성하면_예외가_발생한다() {
+        //given
+        categoryService.save(조깅_카테고리_생성_요청);
+
+        // when & then
+        assertThatThrownBy(() -> categoryService.save(조깅_카테고리_생성_요청))
+                .isInstanceOf(ExistCategoryException.class);
     }
 }
