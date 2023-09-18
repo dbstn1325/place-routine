@@ -31,6 +31,8 @@ public class PlaceService {
         return new PlaceResponse(savedPlace);
     }
 
+
+
     public Point convertRequestToPoint(PlaceCreateRequest request) throws ParseException {
         return convertLocationToPoint(request.getLocation());
     }

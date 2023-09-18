@@ -35,7 +35,6 @@ public class PlaceCreateRequest {
     @NotBlank(message = "공백일 수는 없습니다.")
     private Long categoryId;
 
-
     public Place toEntity(Category category, Point point) {
         return Place.builder()
                 .category(category)
