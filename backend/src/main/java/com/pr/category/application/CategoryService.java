@@ -1,5 +1,7 @@
-package com.pr.category.domain;
+package com.pr.category.application;
 
+import com.pr.category.domain.Category;
+import com.pr.category.domain.CategoryRepository;
 import com.pr.category.dto.request.CategoryCreateRequest;
 import com.pr.category.dto.response.CategoryResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,10 @@
 package com.pr.category.domain;
 
+import com.pr.category.application.CategoryService;
 import com.pr.category.dto.request.CategoryCreateRequest;
 import com.pr.category.dto.response.CategoryResponse;
 import com.pr.category.exception.ExistCategoryException;
 import com.pr.category.exception.InvalidCategoryException;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static com.pr.fixtures.Constants.조깅_카테고리_이름;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest()
 @ActiveProfiles("test")
