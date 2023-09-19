@@ -54,6 +54,13 @@ public class PlaceService {
         return convertPlacesToDTOs(places);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        Place place = placeRepository.getById(id);
+
+        placeRepository.delete(place);
+    }
+
 
     public List<Place> searchPlacesWithinBounds(Location northEast, Location southWest) {
         String pointFormat = String.format(

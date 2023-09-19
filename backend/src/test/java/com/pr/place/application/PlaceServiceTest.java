@@ -1,13 +1,12 @@
 package com.pr.place.application;
 
-import com.pr.category.application.CategoryService;
 import com.pr.category.domain.Category;
 import com.pr.category.domain.CategoryRepository;
 import com.pr.place.domain.Place;
 import com.pr.place.domain.PlaceRepository;
 import com.pr.place.dto.request.PlaceCreateRequest;
 import com.pr.place.dto.response.PlaceResponse;
-import org.assertj.core.api.Assertions;
+import com.pr.place.exception.NoSuchPlaceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.io.ParseException;
@@ -58,16 +57,16 @@ class PlaceServiceTest {
 
     }
 
-    @DisplayName("사용자의 위치 반경 10km 내의 부스를 전체 조회한다")
+    @DisplayName("사용자의 위치 반경 10km 내의 플레이스를 전체 조회한다")
     @Test
-    void 사용자의_위치_반경_10km_내의_부스를_전체_조회한다() throws ParseException {
+    void 사용자의_위치_반경_10km_내의_플레이스를_전체_조회한다() throws ParseException {
         //given
         Category 테스트_카테고리 = 테스트_카테고리();
         Category savedCategory = categoryRepository.save(테스트_카테고리);
         placeService.save(플레이스_생성_요청, savedCategory.getId());
 
         //when
-        List<PlaceResponse> nearbyPlaces = placeService.findPlacesNearLocation(사용자_위치_내_주변_플레이스_조회_요청);
+        List<PlaceResponse> nearbyPlaces = placeService.findPlacesByLocation(사용자_위치_내_주변_플레이스_조회_요청);
 
         //then
         assertAll(
@@ -77,6 +76,22 @@ class PlaceServiceTest {
                 () -> assertThat(nearbyPlaces.get(0).getCategory().getName()).isEqualTo(savedCategory.getName()),
                 () -> assertThat(nearbyPlaces.get(0).getName()).isEqualTo(테스트_플레이스_명)
         );
+    }
+
+    @DisplayName("플레이스를 삭제한다.")
+    @Test
+    void 플레이스를_삭제한다() throws ParseException {
+        //given
+        Category 테스트_카테고리 = 테스트_카테고리();
+        Category savedCategory = categoryRepository.save(테스트_카테고리);
+        PlaceResponse placeResponse = placeService.save(플레이스_생성_요청, savedCategory.getId());
+
+        //when
+        placeService.delete(placeResponse.getId());
+
+        //then
+        assertThatThrownBy(() -> placeRepository.getById(placeResponse.getId()))
+                .isInstanceOf(NoSuchPlaceException.class);
     }
 
 }
