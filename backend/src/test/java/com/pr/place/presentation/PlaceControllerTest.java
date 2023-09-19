@@ -3,8 +3,10 @@ package com.pr.place.presentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pr.category.presentation.CategoryController;
 import com.pr.category.application.CategoryService;
+import com.pr.common.DatabaseCleaner;
 import com.pr.place.application.PlaceService;
 import com.pr.place.dto.request.PlaceCreateRequest;
+import com.pr.place.dto.response.PlaceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,11 +18,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static com.pr.common.fixtures.CategoryFixtures.*;
-import static com.pr.common.fixtures.PlaceFixtures.플레이스_생성_요청;
+import static com.pr.common.fixtures.PlaceFixtures.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,6 +53,7 @@ class PlaceControllerTest {
     protected CategoryService categoryService;
 
 
+
     @DisplayName("사용자가 플레이스를 생성하면 상태코드 201을 반환한다")
     @Test
     void 사용자가_플레이스를_생성하면_상태코드_201을_반환한다() throws Exception {
@@ -59,5 +70,35 @@ class PlaceControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 ).andDo(print())
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("사용자가 플레이스를 목록을 정상적으로 조회하면 상태코드 200을 반환한다.")
+    @Test
+    void 사용자가_플레이스_목록을_정상적으로_조회하면_상태코드_200을_반환한다() throws Exception {
+        //given
+
+        PlaceResponse 반경_1km_내_플레이스_응답 = 반경_내_플레이스_응답(1L, 테스트_플레이스_위치_반경_1km_위치);
+        PlaceResponse 반경_5km_내_플레이스_응답 = 반경_내_플레이스_응답(2L, 테스트_플레이스_위치_반경_5km_위치);
+        PlaceResponse 반경_10km_내_플레이스_응답 = 반경_내_플레이스_응답(3L, 테스트_플레이스_위치_반경_10km_위치);
+
+        given(placeService.findPlacesByLocation(any())).willReturn(
+                List.of(반경_1km_내_플레이스_응답),
+                List.of(반경_5km_내_플레이스_응답),
+                List.of(반경_10km_내_플레이스_응답)
+        );
+
+        //when & then
+        mockMvc.perform(
+                        get("/api/places?latitude={latitude}&longitude={longitude}", 테스트_사용자_위치_위도, 테스트_사용자_위치_경도)
+                ).andDo(print())
+                .andDo(document("places/findPlacesByLocation",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("latitude").description("기준 플레이스 위도"),
+                                parameterWithName("longitude").description("기준 플레이스 경도")
+                        )
+                ))
+                .andExpect(status().isOk());
     }
 }
