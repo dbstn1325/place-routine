@@ -1,20 +1,24 @@
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.15'
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+
 group = 'com.pr'
 version = '0.0.1-SNAPSHOT'
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
 
 java {
 	sourceCompatibility = '11'
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+	asciidoctorExtensions
 }
 
 repositories {
@@ -45,15 +49,48 @@ dependencies {
 	/* validation */
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// Restdocs
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
+	/* datetime serialize */
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+	/* Restdocs */
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+
 
 }
 
-tasks.named('test') {
+test {
+	outputs.dir snippetsDir
 	useJUnitPlatform()
+}
+
+asciidoctor {
+	configurations 'asciidoctorExtensions'
+	baseDirFollowsSourceFile()
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+
+	from "${asciidoctor.outputDir}"
+	into file("src/main/resources/static/docs")
+}
+
+bootJar {
+	dependsOn copyDocument
+}
+
+task printAsciidoctorOutputDir {
+	doLast {
+		println "Asciidoctor Output Directory: ${asciidoctor.outputDir}"
+	}
 }
 
 //processResources.dependsOn('copySecret')
