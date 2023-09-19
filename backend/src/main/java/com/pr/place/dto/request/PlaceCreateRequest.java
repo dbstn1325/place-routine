@@ -26,14 +26,10 @@ public class PlaceCreateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime closeDateTime;
 
-    @NotBlank(message = "공백일 수는 없습니다.")
     private Location location;
 
     @NotBlank(message = "공백일 수는 없습니다.")
     private String memo;
-
-    @NotBlank(message = "공백일 수는 없습니다.")
-    private Long categoryId;
 
     public Place toEntity(Category category, Point point) {
         return Place.builder()

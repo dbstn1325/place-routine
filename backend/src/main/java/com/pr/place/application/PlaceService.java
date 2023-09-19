@@ -2,27 +2,41 @@ package com.pr.place.application;
 
 import com.pr.category.domain.Category;
 import com.pr.category.domain.CategoryRepository;
+import com.pr.global.utils.GeometryUtil;
+import com.pr.place.domain.Direction;
 import com.pr.place.domain.Location;
 import com.pr.place.domain.Place;
 import com.pr.place.domain.PlaceRepository;
 import com.pr.place.dto.request.PlaceCreateRequest;
+import com.pr.place.dto.request.PlaceLocationRequest;
 import com.pr.place.dto.response.PlaceResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import org.springframework.stereotype.Service;
 
-@Service
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Service
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final CategoryRepository categoryRepository;
+    private static final Double SEARCH_MAX_DISTANCE = 10.0;
+    private final EntityManager em;
 
-    public PlaceResponse save(PlaceCreateRequest request) throws ParseException {
-        Category category = categoryRepository.getById(request.getCategoryId());
+    @Transactional
+    public PlaceResponse save(final PlaceCreateRequest request, final Long categoryId) throws ParseException {
+        Category category = categoryRepository.getById(categoryId);
 
         Point point = convertRequestToPoint(request);
         Place place = request.toEntity(category, point);
@@ -31,6 +45,36 @@ public class PlaceService {
         return new PlaceResponse(savedPlace);
     }
 
+    public List<PlaceResponse> findPlacesNearLocation(PlaceLocationRequest request) {
+        Location northEast = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
+        Location southWest = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
+
+        List<Place> places = searchPlacesWithinBounds(northEast, southWest);
+
+        return convertPlacesToDTOs(places);
+    }
+
+
+    public List<Place> searchPlacesWithinBounds(Location northEast, Location southWest) {
+        String pointFormat = String.format(
+                "'LINESTRING(%f %f, %f %f)'",
+                northEast.getLatitude(), northEast.getLongitude(), southWest.getLatitude(), southWest.getLongitude()
+        );
+
+        Query query = em.createNativeQuery(
+                "" +
+                        "SELECT * FROM places AS b WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + "), b.point)",
+                Place.class
+        ).setMaxResults(10);
+
+        return query.getResultList();
+    }
+
+    public List<PlaceResponse> convertPlacesToDTOs(List<Place> places) {
+        return places.stream()
+                .map(PlaceResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
 
 
     public Point convertRequestToPoint(PlaceCreateRequest request) throws ParseException {

@@ -38,7 +38,7 @@ public class Place {
     @Embedded
     private Location location;
 
-    @Embedded
+    @Column(name = "memo", nullable = false)
     private String memo;
 
     @Column
