@@ -1,11 +1,10 @@
-package com.pr.category;
+package com.pr.category.presentation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pr.category.application.CategoryService;
 import com.pr.category.dto.request.CategoryCreateRequest;
-import com.pr.category.dto.response.CategoryResponse;
 import com.pr.category.exception.InvalidCategoryException;
+import com.pr.category.presentation.CategoryController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

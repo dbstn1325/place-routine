@@ -1,4 +1,4 @@
-package com.pr.category;
+package com.pr.category.presentation;
 
 import com.pr.category.application.CategoryService;
 import com.pr.category.dto.request.CategoryCreateRequest;

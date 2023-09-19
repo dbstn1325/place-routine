@@ -47,15 +47,18 @@ dependencies {
 
 	// Restdocs
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
 
-processResources.dependsOn('copySecret')
-tasks.register('copySecret', Copy) {
-	from './src/main/resources/config' //복사할 파일 위치
-	include "application*.yml"  // 복사할 파일들
-	into 'src/main/resources'  // 복사될 파일 위치
-}
+//processResources.dependsOn('copySecret')
+//tasks.register('copySecret', Copy) {
+//	from './src/main/resources/config' //복사할 파일 위치
+//	include "application*.yml"  // 복사할 파일들
+//	into 'src/main/resources'  // 복사될 파일 위치
+//}
