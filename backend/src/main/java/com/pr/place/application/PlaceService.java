@@ -42,10 +42,10 @@ public class PlaceService {
         Place place = request.toEntity(category, point);
 
         Place savedPlace = placeRepository.save(place);
-        return new PlaceResponse(savedPlace);
+        return PlaceResponse.fromEntity(savedPlace);
     }
 
-    public List<PlaceResponse> findPlacesNearLocation(PlaceLocationRequest request) {
+    public List<PlaceResponse> findPlacesByLocation(PlaceLocationRequest request) {
         Location northEast = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtil.calculate(request.getLatitude(), request.getLongitude(), SEARCH_MAX_DISTANCE, Direction.SOUTHWEST.getBearing());
 
