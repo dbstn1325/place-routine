@@ -2,11 +2,13 @@ package com.pr.place.application;
 
 import com.pr.category.domain.Category;
 import com.pr.category.domain.CategoryRepository;
+import com.pr.common.DatabaseCleaner;
 import com.pr.place.domain.Place;
 import com.pr.place.domain.PlaceRepository;
 import com.pr.place.dto.request.PlaceCreateRequest;
 import com.pr.place.dto.response.PlaceResponse;
 import com.pr.place.exception.NoSuchPlaceException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.io.ParseException;
@@ -34,6 +36,14 @@ class PlaceServiceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    void setUp() {
+        databaseCleaner.execute();
+    }
 
     @DisplayName("플레이스를 생성한다.")
     @Test
