@@ -1,15 +1,16 @@
 import GlobalStyle from "./globalStyle";
 import { HomePage } from "./pages/Home";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
-const LoginPage = () =>
-  import(
-    /* webpackChunkName: "Login" */ /* webpackPrefetch: true */ "./pages/Login"
-  );
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ROUTE } from "./constants/route";
 
 function App() {
   return (
     <div className="App">
-      <HomePage />
+      <Router>
+        <Routes>
+          <Route exact path={ROUTE.HOME.PATH} element={<HomePage />}></Route>
+        </Routes>
+      </Router>
     </div>
   );
 }
