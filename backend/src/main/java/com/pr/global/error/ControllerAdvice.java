@@ -1,7 +1,5 @@
 package com.pr.global.error;
 
-import com.pr.category.exception.InvalidCategoryException;
-import com.pr.category.exception.NoSuchCategoryException;
 import com.pr.global.error.dto.ErrorResponse;
 import com.pr.place.exception.InvalidPlaceException;
 import com.pr.place.exception.NoSuchPlaceCategoryException;
@@ -16,7 +14,6 @@ public class ControllerAdvice {
 
 
     @ExceptionHandler({
-            InvalidCategoryException.class,
             InvalidPlaceException.class
     })
     public ResponseEntity<ErrorResponse> handleInvalidData(final RuntimeException e) {
@@ -25,7 +22,6 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoSuchCategoryException.class,
             NoSuchPlaceException.class,
             NoSuchPlaceCategoryException.class
     })

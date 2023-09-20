@@ -1,7 +1,5 @@
 package com.pr.place.application;
 
-import com.pr.category.domain.Category;
-import com.pr.category.domain.CategoryRepository;
 import com.pr.common.DatabaseCleaner;
 import com.pr.place.domain.Place;
 import com.pr.place.domain.PlaceRepository;
@@ -19,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.pr.common.fixtures.CategoryFixtures.테스트_카테고리;
 import static com.pr.common.fixtures.PlaceFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,9 +30,6 @@ class PlaceServiceTest {
 
     @Autowired
     private PlaceRepository placeRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
@@ -87,8 +81,6 @@ class PlaceServiceTest {
     @Test
     void 플레이스를_삭제한다() throws ParseException {
         //given
-        Category 테스트_카테고리 = 테스트_카테고리();
-        Category savedCategory = categoryRepository.save(테스트_카테고리);
         PlaceResponse placeResponse = placeService.save(플레이스_생성_요청);
 
         //when

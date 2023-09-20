@@ -1,8 +1,6 @@
 package com.pr.place.domain;
 
-import com.pr.category.domain.Category;
 import com.pr.place.exception.InvalidPlaceException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
