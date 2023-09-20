@@ -38,5 +38,12 @@ public class PlaceController {
         return placeService.findPlacesByLocation(request);
     }
 
+    @DeleteMapping("/places/{placeId}")
+    public ResponseEntity<Void> delete(@PathVariable final Long placeId) {
+        placeService.delete(placeId);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }
