@@ -1,4 +1,4 @@
-package com.pr.category;
+package com.pr.category.domain;
 
 import com.pr.category.domain.Category;
 import com.pr.category.exception.InvalidCategoryException;

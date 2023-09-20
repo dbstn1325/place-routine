@@ -4,6 +4,8 @@ import com.pr.category.exception.InvalidCategoryException;
 import com.pr.category.exception.NoSuchCategoryException;
 import com.pr.global.error.dto.ErrorResponse;
 import com.pr.place.exception.InvalidPlaceException;
+import com.pr.place.exception.NoSuchPlaceCategoryException;
+import com.pr.place.exception.NoSuchPlaceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,7 +25,9 @@ public class ControllerAdvice {
     }
 
     @ExceptionHandler({
-            NoSuchCategoryException.class
+            NoSuchCategoryException.class,
+            NoSuchPlaceException.class,
+            NoSuchPlaceCategoryException.class
     })
     public ResponseEntity<ErrorResponse> handleNoSuchData(final RuntimeException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
