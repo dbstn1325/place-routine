@@ -1,6 +1,5 @@
 package com.pr.place.application;
 
-import com.pr.category.domain.Category;
 import com.pr.category.domain.CategoryRepository;
 import com.pr.global.utils.GeometryUtil;
 import com.pr.place.domain.Direction;
@@ -30,16 +29,14 @@ import java.util.stream.Collectors;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
-    private final CategoryRepository categoryRepository;
     private static final Double SEARCH_MAX_DISTANCE = 10.0;
     private final EntityManager em;
 
     @Transactional
-    public PlaceResponse save(final PlaceCreateRequest request, final Long categoryId) throws ParseException {
-        Category category = categoryRepository.getById(categoryId);
+    public PlaceResponse save(final PlaceCreateRequest request) throws ParseException {
 
         Point point = convertRequestToPoint(request);
-        Place place = request.toEntity(category, point);
+        Place place = request.toEntity(point);
 
         Place savedPlace = placeRepository.save(place);
         return PlaceResponse.fromEntity(savedPlace);

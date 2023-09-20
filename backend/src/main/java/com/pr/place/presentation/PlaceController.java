@@ -29,7 +29,7 @@ public class PlaceController {
             @PathVariable final Long categoryId,
             @Valid @RequestBody final PlaceCreateRequest request
     ) throws ParseException {
-        PlaceResponse response = placeService.save(request, categoryId);
+        PlaceResponse response = placeService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -49,13 +49,10 @@ class PlaceServiceTest {
     @Test
     void 플레이스를_생성한다() throws ParseException {
         //given
-        Category 테스트_카테고리 = 테스트_카테고리();
-        categoryRepository.save(테스트_카테고리);
         PlaceCreateRequest request = 플레이스_생성_요청;
-        Long categoryId = 1L;
 
         //when
-        PlaceResponse placeResponse = placeService.save(request, categoryId);
+        PlaceResponse placeResponse = placeService.save(request);
         Place actual = placeRepository.getById(placeResponse.getId());
 
         //then
@@ -71,9 +68,7 @@ class PlaceServiceTest {
     @Test
     void 사용자의_위치_반경_10km_내의_플레이스를_전체_조회한다() throws ParseException {
         //given
-        Category 테스트_카테고리 = 테스트_카테고리();
-        Category savedCategory = categoryRepository.save(테스트_카테고리);
-        placeService.save(플레이스_생성_요청, savedCategory.getId());
+        placeService.save(플레이스_생성_요청);
 
         //when
         List<PlaceResponse> nearbyPlaces = placeService.findPlacesByLocation(사용자_위치_내_주변_플레이스_조회_요청);
@@ -83,7 +78,7 @@ class PlaceServiceTest {
                 () -> assertThat(nearbyPlaces).isNotNull(),
                 () -> assertThat(nearbyPlaces).isNotEmpty(),
                 () -> assertThat(nearbyPlaces.get(0).getLocation()).usingRecursiveComparison().isEqualTo(테스트_플레이스_위치),
-                () -> assertThat(nearbyPlaces.get(0).getCategory().getName()).isEqualTo(savedCategory.getName()),
+                () -> assertThat(nearbyPlaces.get(0).getCategoryType()).isEqualTo(테스트_코딩_카테고리),
                 () -> assertThat(nearbyPlaces.get(0).getName()).isEqualTo(테스트_플레이스_명)
         );
     }
@@ -94,7 +89,7 @@ class PlaceServiceTest {
         //given
         Category 테스트_카테고리 = 테스트_카테고리();
         Category savedCategory = categoryRepository.save(테스트_카테고리);
-        PlaceResponse placeResponse = placeService.save(플레이스_생성_요청, savedCategory.getId());
+        PlaceResponse placeResponse = placeService.save(플레이스_생성_요청);
 
         //when
         placeService.delete(placeResponse.getId());

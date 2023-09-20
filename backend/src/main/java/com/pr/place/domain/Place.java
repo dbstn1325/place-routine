@@ -1,6 +1,6 @@
 package com.pr.place.domain;
 
-import com.pr.category.domain.Category;
+
 import com.pr.place.exception.InvalidPlaceException;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
@@ -23,8 +23,8 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "categories_id", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
 
     private String name;
@@ -46,11 +46,11 @@ public class Place {
 
 
     @Builder
-    public Place(Category category, String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, String memo, Point point) {
+    public Place(String category, String name, LocalDateTime openDateTime, LocalDateTime closeDateTime, Location location, String memo, Point point) {
         validateMemoLength(memo);
         validateTitleLength(name);
 
-        this.category = category;
+        this.category = Category.from(category);
         this.name = name;
         this.openDateTime = openDateTime;
         this.closeDateTime = closeDateTime;
