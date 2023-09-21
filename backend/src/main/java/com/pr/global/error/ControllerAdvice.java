@@ -1,5 +1,6 @@
 package com.pr.global.error;
 
+import com.pr.auth.exception.InvalidTokenException;
 import com.pr.global.error.dto.ErrorResponse;
 import com.pr.place.exception.InvalidPlaceException;
 import com.pr.place.exception.NoSuchPlaceCategoryException;
@@ -29,4 +30,13 @@ public class ControllerAdvice {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+
+    @ExceptionHandler({
+            InvalidTokenException.class
+    })
+    public ResponseEntity<ErrorResponse> handleInvalidAuthorization(final RuntimeException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
 }

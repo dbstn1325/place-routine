@@ -1,6 +1,10 @@
 package com.pr.member.domain;
 
 import com.pr.member.exception.InvalidMemberException;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +19,8 @@ import javax.persistence.Table;
 
 @Table(name = "members")
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-z0-9._-]+@[a-z]+[.]+[a-z]{2,3}$");
@@ -38,9 +44,7 @@ public class Member {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    protected Member() {
-    }
-
+    @Builder
     public Member(final String email, final String profileImageUrl, final String displayName,
                   final SocialType socialType) {
         validateEmail(email);
@@ -65,23 +69,4 @@ public class Member {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public SocialType getSocialType() {
-        return socialType;
-    }
 }
